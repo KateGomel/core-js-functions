@@ -188,8 +188,20 @@ function retry(func, attempts) {
  *
  */
 
-function logger(/* func, logFunc */) {
-  throw new Error('Not implemented');
+function logger(func, logFunc) {
+  return (...args) => {
+    const functionName = func.name;
+
+    const argsString = args.map((arg) => JSON.stringify(arg)).join(',');
+
+    logFunc(`${functionName}(${argsString}) starts`);
+
+    const result = func(...args);
+
+    logFunc(`${functionName}(${argsString}) ends`);
+
+    return result;
+  };
 }
 
 /**
